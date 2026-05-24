@@ -21,6 +21,7 @@ import logging
 import os
 import shutil
 import tempfile
+from datetime import UTC
 from pathlib import Path
 
 from kubeforge.config import settings
@@ -469,7 +470,7 @@ def _build_autoinstall_script(project_name: str) -> str:
         '    echo "[6/9] Loading container images..."',
         '    if [ -d "$DATA_DIR/images" ]; then',
         "        local count=0",
-        '        local total=$(find "$DATA_DIR/images" -name "*.tar" -o -name "*.tar.gz" -o -name "*.tar.zst" 2>/dev/null | wc -l)',
+        '        local total=$(find "$DATA_DIR/images" -type f -name "*.tar*" 2>/dev/null | wc -l)',
         '        echo "  Found $total image archives"',
         '        for img in "$DATA_DIR"/images/*.tar "$DATA_DIR"/images/*.tar.gz; do',
         '            [ -f "$img" ] || continue',
@@ -518,7 +519,7 @@ def _build_autoinstall_script(project_name: str) -> str:
         "# Summary",
         "show_summary() {",
         '    echo "[9/9] Deployment summary:"',
-        "    local vm_ip=$(ip -4 addr show | grep 'inet ' | grep -v 127.0.0.1 | awk '{print $2}' | cut -d/ -f1 | head -1)",
+        "    local vm_ip=$(ip -4 addr show | awk '/inet / && $2!~/127.0.0.1/ {split($2,a,\"/\"); print a[1]; exit}')",
         "    /usr/local/bin/k3s kubectl get nodes -o wide 2>/dev/null || true",
         "    echo ''",
         "    /usr/local/bin/k3s kubectl get pods --all-namespaces 2>/dev/null || true",
@@ -812,8 +813,8 @@ async def create_bootable_iso(
         sudo apt install -y debootstrap squashfs-tools xorriso isolinux syslinux-common
     """
     from kubeforge.image_puller import pull_images
-    from kubeforge.k3s_downloader import download_all as download_k3s_all
     from kubeforge.iso_builder import compute_iso_checksum
+    from kubeforge.k3s_downloader import download_all as download_k3s_all
 
     # Force amd64 -- only supported architecture for bootable ISO
     target_arch = "amd64"
@@ -823,8 +824,8 @@ async def create_bootable_iso(
     out = out or Path(settings.packager.output_dir)
     out.mkdir(parents=True, exist_ok=True)
 
-    from datetime import datetime, timezone
-    timestamp = datetime.now(timezone.utc).strftime("%Y%m%d-%H%M%S")
+    from datetime import datetime
+    timestamp = datetime.now(UTC).strftime("%Y%m%d-%H%M%S")
     iso_name = f"{project_name}-bootable-{timestamp}.iso"
     iso_path = out / iso_name
 

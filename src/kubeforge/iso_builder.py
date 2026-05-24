@@ -20,13 +20,8 @@ from __future__ import annotations
 import hashlib
 import logging
 import shutil
-import struct
-import tempfile
-from datetime import datetime, timezone
+from collections.abc import Callable
 from pathlib import Path
-from typing import Callable
-
-from kubeforge.config import settings
 
 logger = logging.getLogger("kubeforge.iso_builder")
 
@@ -145,7 +140,7 @@ async def _build_with_pycdlib(source_dir: Path, output_path: Path, volume_label:
         )
 
         for item in sorted(local_path.iterdir()):
-            item_iso = f"{iso_path}/{item.name.upper()[:8]}.;1" if item.is_file() else f"{iso_path}/{item.name.upper()[:8]}"
+            # compute ISO/Joliet paths for each item (used below when adding files/dirs)
             item_joliet = f"{joliet_path}/{item.name}"
             if item.is_file():
                 iso.add_file(

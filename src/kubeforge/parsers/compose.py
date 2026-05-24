@@ -12,7 +12,6 @@ import re
 import yaml
 
 from kubeforge.models.manifest import (
-    ConfigData,
     Dependency,
     EnvVar,
     HealthCheck,
@@ -21,7 +20,6 @@ from kubeforge.models.manifest import (
     NormalizedManifest,
     Port,
     ResourceRequirements,
-    SecretData,
     Service,
     ServicePort,
     Volume,

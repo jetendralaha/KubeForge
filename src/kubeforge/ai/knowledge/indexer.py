@@ -76,7 +76,7 @@ async def index_builtin_knowledge() -> int:
 
 
 def _split_chunks(text: str, size: int, overlap: int) -> list[str]:
-    lines = [l.strip() for l in text.split("\n") if l.strip()]
+    lines = [line.strip() for line in text.split("\n") if line.strip()]
     chunks, current, length = [], [], 0
     for line in lines:
         if length + len(line) > size and current:
@@ -101,9 +101,44 @@ def _chunk_id(content: str, idx: int) -> str:
 
 def _builtin_knowledge() -> list[dict]:
     return [
-        {"content": "K3s Resource Limits: Always set CPU/memory requests and limits. For single-node K3s keep total requests under 80% of capacity. Use LimitRange and ResourceQuota for namespace enforcement.", "metadata": {"source": "builtin", "topic": "resource-limits"}},
-        {"content": "Traefik on K3s: Ships with Traefik v2 as default ingress controller. Use IngressRoute CRD for advanced routing. For air-gap TLS use cert-manager with self-signed CA.", "metadata": {"source": "builtin", "topic": "traefik-ingress"}},
-        {"content": "Longhorn Storage: Distributed block storage for K3s. Default 3 replicas; single-node set to 1. Supports snapshots, encryption (LUKS), and S3 backups.", "metadata": {"source": "builtin", "topic": "longhorn-storage"}},
-        {"content": "K3s Air-Gap: Place images in /var/lib/rancher/k3s/agent/images/. Configure registries.yaml at /etc/rancher/k3s/. Helm charts go in /var/lib/rancher/k3s/server/static/charts/.", "metadata": {"source": "builtin", "topic": "airgap"}},
-        {"content": "K3s Security: Enable PSA (baseline/restricted). Use --secrets-encryption. Set automountServiceAccountToken: false. Apply default-deny NetworkPolicy. Enable audit logging.", "metadata": {"source": "builtin", "topic": "security"}},
+        {
+            "content": (
+                "K3s Resource Limits: Always set CPU/memory requests and limits. "
+                "For single-node K3s keep total requests under 80% of capacity. "
+                "Use LimitRange and ResourceQuota for namespace enforcement."
+            ),
+            "metadata": {"source": "builtin", "topic": "resource-limits"},
+        },
+        {
+            "content": (
+                "Traefik on K3s: Ships with Traefik v2 as default ingress controller. "
+                "Use IngressRoute CRD for advanced routing. For air-gap TLS use "
+                "cert-manager with self-signed CA."
+            ),
+            "metadata": {"source": "builtin", "topic": "traefik-ingress"},
+        },
+        {
+            "content": (
+                "Longhorn Storage: Distributed block storage for K3s. Default 3 "
+                "replicas; single-node set to 1. Supports snapshots, encryption "
+                "(LUKS), and S3 backups."
+            ),
+            "metadata": {"source": "builtin", "topic": "longhorn-storage"},
+        },
+        {
+            "content": (
+                "K3s Air-Gap: Place images in /var/lib/rancher/k3s/agent/images/. "
+                "Configure registries.yaml at /etc/rancher/k3s/. Helm charts go "
+                "in /var/lib/rancher/k3s/server/static/charts/."
+            ),
+            "metadata": {"source": "builtin", "topic": "airgap"},
+        },
+        {
+            "content": (
+                "K3s Security: Enable PSA (baseline/restricted). Use "
+                "--secrets-encryption. Set automountServiceAccountToken: false. "
+                "Apply default-deny NetworkPolicy. Enable audit logging."
+            ),
+            "metadata": {"source": "builtin", "topic": "security"},
+        },
     ]

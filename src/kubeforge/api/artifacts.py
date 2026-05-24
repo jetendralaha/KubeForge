@@ -10,7 +10,7 @@ from fastapi import APIRouter, File, Form, HTTPException, UploadFile
 
 from kubeforge.db import artifacts as db
 from kubeforge.db import projects as proj_db
-from kubeforge.events import Event, bus, ARTIFACT_UPLOADED, ARTIFACT_PARSED
+from kubeforge.events import ARTIFACT_PARSED, ARTIFACT_UPLOADED, Event, bus
 from kubeforge.models import ArtifactStatus, ChartRole
 from kubeforge.parsers import get_registry
 from kubeforge.parsers.base import ParseOptions

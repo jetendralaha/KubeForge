@@ -105,11 +105,6 @@ def generate(manifest: NormalizedManifest, namespace: str = "", skip_hardening: 
     if manifest.raw_resources:
         raw_docs = []
         # Resource kinds that are namespace-scoped (should get namespace injected)
-        namespaced_kinds = {
-            "Job", "CronJob", "Role", "RoleBinding", "ServiceAccount",
-            "HorizontalPodAutoscaler", "PodDisruptionBudget", "LimitRange",
-            "ResourceQuota", "Endpoints", "EndpointSlice",
-        }
         # Cluster-scoped kinds that should NOT get a namespace
         cluster_kinds = {
             "ClusterRole", "ClusterRoleBinding", "Namespace",

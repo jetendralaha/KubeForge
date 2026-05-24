@@ -11,12 +11,11 @@ without internet access.
 
 from __future__ import annotations
 
-import asyncio
 import hashlib
 import logging
 import platform
+from collections.abc import Callable
 from pathlib import Path
-from typing import Callable
 
 import httpx
 
@@ -59,7 +58,6 @@ def _k3s_binary_url(version: str, arch: str) -> str:
 
 def _k3s_airgap_url(version: str, arch: str) -> str:
     """Get K3s airgap images tarball URL."""
-    suffix = "" if arch == "amd64" else f"-{arch}"
     return f"{K3S_RELEASE_BASE}/{version}/k3s-airgap-images-{arch}.tar.zst"
 
 
@@ -201,7 +199,7 @@ async def download_all(
     _progress(f"Downloading K3s binary {version}")
     binary = await download_k3s_binary(output_dir, version, arch)
 
-    _progress(f"Downloading K3s airgap images")
+    _progress("Downloading K3s airgap images")
     airgap = await download_k3s_airgap_images(output_dir, version, arch)
 
     _progress("Downloading K3s install script")

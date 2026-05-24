@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 from kubeforge.db.engine import get_db
 from kubeforge.models import AIAnalysis, AnalysisStatus, RiskItem
@@ -23,7 +23,7 @@ async def create_analysis(artifact_id: str, project_id: str, analysis_type: str 
 
 async def update_analysis(analysis_id: str, status: AnalysisStatus, result_json: str = "") -> None:
     db = await get_db()
-    completed = datetime.now(timezone.utc).isoformat() if status in (AnalysisStatus.COMPLETED, AnalysisStatus.FAILED) else None
+    completed = datetime.now(UTC).isoformat() if status in (AnalysisStatus.COMPLETED, AnalysisStatus.FAILED) else None
     await db.execute(
         "UPDATE ai_analyses SET status = ?, result_json = ?, completed_at = ? WHERE id = ?",
         (status.value, result_json, completed, analysis_id),
@@ -65,10 +65,14 @@ async def create_risk(analysis_id: str, project_id: str, title: str, description
 
 async def list_risks(project_id: str) -> list[RiskItem]:
     db = await get_db()
-    sev_order = "CASE severity WHEN 'critical' THEN 0 WHEN 'high' THEN 1 WHEN 'medium' THEN 2 WHEN 'low' THEN 3 ELSE 4 END"
-    cursor = await db.execute(
-        f"SELECT * FROM ai_risks WHERE project_id = ? ORDER BY {sev_order}", (project_id,)
+    sev_order = (
+        "CASE severity "
+        "WHEN 'critical' THEN 0 "
+        "WHEN 'high' THEN 1 "
+        "WHEN 'medium' THEN 2 "
+        "WHEN 'low' THEN 3 ELSE 4 END"
     )
+    cursor = await db.execute(f"SELECT * FROM ai_risks WHERE project_id = ? ORDER BY {sev_order}", (project_id,))
     return [_row_to_risk(r) for r in await cursor.fetchall()]
 
 

@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 from kubeforge.db.engine import get_db
 from kubeforge.models import Project, ProjectStatus
@@ -48,7 +48,7 @@ async def update_project_status(project_id: str, status: ProjectStatus) -> None:
     db = await get_db()
     await db.execute(
         "UPDATE projects SET status = ?, updated_at = ? WHERE id = ?",
-        (status.value, datetime.now(timezone.utc).isoformat(), project_id),
+        (status.value, datetime.now(UTC).isoformat(), project_id),
     )
     await db.commit()
 

@@ -7,8 +7,8 @@ from kubeforge.models.manifest import (
     Port,
     Service,
     ServicePort,
-    Workload,
     Volume,
+    Workload,
 )
 
 

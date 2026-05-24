@@ -9,23 +9,18 @@
 
 <p align="center">
   <!-- Build & Quality -->
-  <a href="https://github.com/jetendra/KubeForge/actions/workflows/ci.yml"><img src="https://github.com/jetendra/KubeForge/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
-  <a href="https://codecov.io/gh/jetendra/KubeForge"><img src="https://codecov.io/gh/jetendra/KubeForge/branch/main/graph/badge.svg" alt="codecov"></a>
-  <a href="https://www.codefactor.io/repository/github/jetendra/kubeforge"><img src="https://www.codefactor.io/repository/github/jetendra/kubeforge/badge" alt="CodeFactor"></a>
+  <a href="https://github.com/jetendralaha/KubeForge/actions/workflows/ci.yml"><img src="https://github.com/jetendralaha/KubeForge/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
+  <a href="https://codecov.io/gh/jetendralaha/KubeForge"><img src="https://codecov.io/gh/jetendralaha/KubeForge/branch/main/graph/badge.svg" alt="codecov"></a>
   <br>
   <!-- Package -->
-  <a href="https://pypi.org/project/kubeforge/"><img src="https://img.shields.io/pypi/v/kubeforge?color=blue&logo=pypi&logoColor=white" alt="PyPI"></a>
-  <a href="https://pypi.org/project/kubeforge/"><img src="https://img.shields.io/pypi/pyversions/kubeforge?logo=python&logoColor=white" alt="Python"></a>
   <a href="https://pypi.org/project/kubeforge/"><img src="https://img.shields.io/pypi/dm/kubeforge?color=green&logo=pypi&logoColor=white" alt="Downloads"></a>
-  <a href="https://hub.docker.com/r/jetendra/kubeforge"><img src="https://img.shields.io/docker/pulls/jetendra/kubeforge?logo=docker&logoColor=white" alt="Docker Pulls"></a>
   <br>
   <!-- Meta -->
-  <a href="LICENSE"><img src="https://img.shields.io/github/license/jetendra/KubeForge?color=brightgreen" alt="License: MIT"></a>
-  <a href="https://github.com/jetendra/KubeForge/releases"><img src="https://img.shields.io/github/v/release/jetendra/KubeForge?include_prereleases&sort=semver&logo=github" alt="Release"></a>
-  <a href="https://github.com/jetendra/KubeForge/issues"><img src="https://img.shields.io/github/issues/jetendra/KubeForge" alt="Issues"></a>
-  <a href="https://github.com/jetendra/KubeForge/pulls"><img src="https://img.shields.io/github/issues-pr/jetendra/KubeForge" alt="PRs"></a>
-  <a href="https://github.com/jetendra/KubeForge/stargazers"><img src="https://img.shields.io/github/stars/jetendra/KubeForge?style=social" alt="Stars"></a>
-  <a href="https://github.com/jetendra/KubeForge/network/members"><img src="https://img.shields.io/github/forks/jetendra/KubeForge?style=social" alt="Forks"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/github/license/jetendralaha/KubeForge?color=brightgreen" alt="License: MIT"></a>
+  <a href="https://github.com/jetendralaha/KubeForge/issues"><img src="https://img.shields.io/github/issues/jetendralaha/KubeForge" alt="Issues"></a>
+  <a href="https://github.com/jetendralaha/KubeForge/pulls"><img src="https://img.shields.io/github/issues-pr/jetendralaha/KubeForge" alt="PRs"></a>
+  <a href="https://github.com/jetendralaha/KubeForge/stargazers"><img src="https://img.shields.io/github/stars/jetendralaha/KubeForge?style=social" alt="Stars"></a>
+  <a href="https://github.com/jetendralaha/KubeForge/network/members"><img src="https://img.shields.io/github/forks/jetendralaha/KubeForge?style=social" alt="Forks"></a>
   <br>
   <!-- Tech -->
   <img src="https://img.shields.io/badge/FastAPI-009688?logo=fastapi&logoColor=white" alt="FastAPI">

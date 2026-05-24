@@ -11,16 +11,24 @@ from kubeforge.models import RiskItem, RiskResult
 
 logger = logging.getLogger("kubeforge.ai.risk")
 
-RISK_SYSTEM = """You are a Kubernetes security expert specialising in K3s.
-Analyse the manifest for security risks, misconfigurations, and reliability concerns.
+RISK_SYSTEM = (
+    "You are a Kubernetes security expert specialising in K3s.\n"
+    "Analyse the manifest for security risks, misconfigurations, and reliability "
+    "concerns.\n\n"
+    "Categories: security, reliability, performance, networking, storage, configuration\n"
+    "Severity: critical, high, medium, low, info\n\n"
+    "Return JSON: {\"risks\": [{\"title\": \"...\", \"description\": \"...\", "
+    "\"severity\": \"...\", \"category\": \"...\", \"remediation\": "
+    "\"...\"}]}"
+)
 
-Categories: security, reliability, performance, networking, storage, configuration
-Severity: critical, high, medium, low, info
 
-Return JSON: {"risks": [{"title": "...", "description": "...", "severity": "...", "category": "...", "remediation": "..."}]}"""
-
-
-async def detect_risks(content: str, artifact_type: str = "", project_id: str = "", analysis_id: str = "") -> RiskResult:
+async def detect_risks(
+    content: str,
+    artifact_type: str = "",
+    project_id: str = "",
+    analysis_id: str = "",
+) -> RiskResult:
     """Analyse content for deployment risks."""
     risks: list[RiskItem] = []
 
@@ -111,7 +119,18 @@ def _heuristic_risks(content: str, artifact_type: str) -> list[RiskItem]:
 
                 # Secrets in plain env vars
                 env = svc.get("environment", {})
-                env_items = env.items() if isinstance(env, dict) else [(e.split("=", 1)[0], e.split("=", 1)[1]) if "=" in str(e) else (e, "") for e in (env if isinstance(env, list) else [])]
+                if isinstance(env, dict):
+                    env_items = env.items()
+                else:
+                    env_items = []
+                    seq = env if isinstance(env, list) else []
+                    for e in seq:
+                        if "=" in str(e):
+                            k, v = e.split("=", 1)
+                            env_items.append((k, v))
+                        else:
+                            env_items.append((e, ""))
+
                 for k, v in env_items:
                     k_lower = str(k).lower()
                     if any(s in k_lower for s in ("password", "secret", "key", "token")) and v:
@@ -189,8 +208,15 @@ def _heuristic_risks(content: str, artifact_type: str) -> list[RiskItem]:
 async def _llm_risks(content: str, artifact_type: str) -> list[RiskItem]:
     """Use LLM for deeper risk analysis."""
     truncated = content[:4000]
+    prompt = (
+        f"Analyse this {artifact_type or 'deployment'} for risks:\n\n"
+        "```yaml\n"
+        f"{truncated}\n"
+        "```"
+    )
+
     result = await chat_completion(
-        prompt=f"Analyse this {artifact_type or 'deployment'} for risks:\n\n```yaml\n{truncated}\n```",
+        prompt=prompt,
         system_prompt=RISK_SYSTEM,
         json_schema={"type": "object"},
     )

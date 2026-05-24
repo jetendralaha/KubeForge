@@ -8,15 +8,42 @@ from kubeforge.db.engine import get_db
 from kubeforge.models import Image
 
 
-async def create_image(reference: str, registry: str = "", repository: str = "", tag: str = "", digest: str = "") -> Image:
-    img = Image(reference=reference, registry=registry, repository=repository, tag=tag, digest=digest)
+async def create_image(
+    reference: str,
+    registry: str = "",
+    repository: str = "",
+    tag: str = "",
+    digest: str = "",
+) -> Image:
+    img = Image(
+        reference=reference,
+        registry=registry,
+        repository=repository,
+        tag=tag,
+        digest=digest,
+    )
     db = await get_db()
     # Use both old and new column names for compatibility
     await db.execute(
-        """INSERT OR IGNORE INTO images (id, reference, name, registry, repository, tag, digest, size_bytes, cached, is_cached, cached_path, created_at)
-           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
-        (img.id, img.reference, img.repository or img.reference, img.registry, img.repository, img.tag, img.digest,
-         img.size_bytes, int(img.cached), int(img.cached), img.cached_path, img.created_at.isoformat()),
+        (
+            "INSERT OR IGNORE INTO images (id, reference, name, registry, repository, "
+            "tag, digest, size_bytes, cached, is_cached, cached_path, created_at)"
+            " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+        ),
+        (
+            img.id,
+            img.reference,
+            img.repository or img.reference,
+            img.registry,
+            img.repository,
+            img.tag,
+            img.digest,
+            img.size_bytes,
+            int(img.cached),
+            int(img.cached),
+            img.cached_path,
+            img.created_at.isoformat(),
+        ),
     )
     await db.commit()
     return img

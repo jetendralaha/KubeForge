@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import json
 import logging
 
 from fastapi import APIRouter, HTTPException
@@ -11,7 +10,7 @@ from kubeforge.db import artifacts as artifact_db
 from kubeforge.db import deployments as deploy_db
 from kubeforge.db import images as image_db
 from kubeforge.db import projects as proj_db
-from kubeforge.events import Event, bus, IMAGES_RESOLVED, MANIFESTS_GENERATED
+from kubeforge.events import IMAGES_RESOLVED, MANIFESTS_GENERATED, Event, bus
 from kubeforge.generator import generate
 from kubeforge.models import ArtifactStatus
 from kubeforge.models.manifest import NormalizedManifest

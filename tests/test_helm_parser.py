@@ -6,13 +6,12 @@ import base64
 import io
 import tarfile
 import textwrap
-from unittest.mock import MagicMock, patch
+from unittest.mock import patch
 
 import pytest
 
-from kubeforge.parsers.helm import HelmParser, HelmParseError
 from kubeforge.parsers.base import ParseOptions
-
+from kubeforge.parsers.helm import HelmParseError, HelmParser
 
 # ── Helpers ─────────────────────────────────────────────────────────
 

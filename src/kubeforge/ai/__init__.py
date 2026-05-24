@@ -7,10 +7,10 @@ when qdrant-client is installed.
 """
 
 try:
-    from kubeforge.ai.ollama import chat_completion, generate_embedding, health_check
     from kubeforge.ai.detector import detect_type
-    from kubeforge.ai.risk import detect_risks
+    from kubeforge.ai.ollama import chat_completion, generate_embedding, health_check
     from kubeforge.ai.recommendations import get_recommendations
+    from kubeforge.ai.risk import detect_risks
 except ImportError:  # pragma: no cover
     # AI deps not installed — provide stubs so the rest of the app loads
     async def chat_completion(*a, **kw):  # type: ignore[misc]

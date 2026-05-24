@@ -7,7 +7,6 @@ Services, ConfigMaps, Secrets, PVCs, Ingresses, etc.
 from __future__ import annotations
 
 import logging
-import re
 
 import yaml
 
@@ -212,9 +211,15 @@ class KubernetesParser(ManifestParser):
             elif "valueFrom" in e:
                 vf = e["valueFrom"]
                 if "secretKeyRef" in vf:
-                    ev.value_from = f"secret:{vf['secretKeyRef'].get('name', '')}:{vf['secretKeyRef'].get('key', '')}"
+                    ev.value_from = (
+                        f"secret:{vf['secretKeyRef'].get('name', '')}:"
+                        f"{vf['secretKeyRef'].get('key', '')}"
+                    )
                 elif "configMapKeyRef" in vf:
-                    ev.value_from = f"configmap:{vf['configMapKeyRef'].get('name', '')}:{vf['configMapKeyRef'].get('key', '')}"
+                    ev.value_from = (
+                        f"configmap:{vf['configMapKeyRef'].get('name', '')}:"
+                        f"{vf['configMapKeyRef'].get('key', '')}"
+                    )
             workload.env.append(ev)
 
         # Volume mounts

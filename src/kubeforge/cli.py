@@ -17,9 +17,7 @@ Commands:
 
 from __future__ import annotations
 
-import json
 import shutil
-import sys
 from pathlib import Path
 
 import httpx
@@ -199,7 +197,7 @@ def upload(
     rprint(f"  Namespace:  {result.get('namespace', 'default')}")
     rprint(f"  Chart role: {result.get('chart_role', 'app')}")
     if result.get('has_values'):
-        rprint(f"  Values:     [green]attached[/green]")
+        rprint("  Values:     [green]attached[/green]")
     if result['status'] == 'failed':
         rprint("[yellow]  ⚠ Auto-parse failed. 'generate' will retry parsing.[/yellow]")
         rprint("[dim]    Check server logs for details (e.g. helm not installed).[/dim]")
@@ -306,7 +304,7 @@ def package(project_id: str = typer.Argument(..., help="Project ID")):
 @app.command()
 def iso(
     project_id: str = typer.Argument(..., help="Project ID"),
-    bootable: bool = typer.Option(False, "--bootable", help="Create bootable ISO with embedded Debian Linux OS (boots into K3s + deploys app)"),
+    bootable: bool = typer.Option(False, "--bootable", help="Create bootable ISO (Debian rootfs + K3s)"),
     no_images: bool = typer.Option(False, "--no-images", help="Skip pulling container images"),
     no_k3s: bool = typer.Option(False, "--no-k3s", help="Skip downloading K3s binaries"),
     arch: str = typer.Option("auto", "--arch", help="Target arch: amd64, arm64, or auto"),
@@ -372,7 +370,7 @@ def status(job_id: str = typer.Argument(..., help="Job ID")):
 @app.command("iso-validate")
 def iso_validate(
     iso_path: str = typer.Argument(..., help="Path to the .iso file to validate"),
-    boot_test: bool = typer.Option(False, "--boot-test", help="Quick-test boot with QEMU (requires qemu-system-x86_64)"),
+    boot_test: bool = typer.Option(False, "--boot-test", help="Quick-test boot with QEMU"),
 ):
     """Validate a bootable ISO has correct structure and is bootable.
 
@@ -381,9 +379,9 @@ def iso_validate(
     with QEMU.
     """
     import subprocess
-    from pathlib import Path as P
+    from pathlib import Path
 
-    iso = P(iso_path)
+    iso = Path(iso_path)
     if not iso.exists():
         rprint(f"[red]ISO not found:[/red] {iso_path}")
         raise typer.Exit(1)
@@ -607,7 +605,7 @@ def deploy_status(deployment_id: str = typer.Argument(..., help="Deployment ID")
     rprint(f"  [cyan]Created[/cyan]:   {data['created_at'][:19]}")
     rprint(f"  [cyan]Updated[/cyan]:   {data['updated_at'][:19]}")
     if data.get("log"):
-        rprint(f"\n[dim]Log:[/dim]")
+        rprint("\n[dim]Log:[/dim]")
         rprint(data["log"])
 
 

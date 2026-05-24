@@ -13,15 +13,17 @@ from __future__ import annotations
 
 import asyncio
 import logging
-from enum import Enum
-from pathlib import Path
-from typing import Callable
+from collections.abc import Callable
 
 from kubeforge.config import settings
 from kubeforge.db import deployments as deploy_db
 from kubeforge.events import (
-    Event, bus,
-    CHART_DEPLOYED, DEPLOY_COMPLETED, DEPLOY_FAILED, DEPLOY_STARTED,
+    CHART_DEPLOYED,
+    DEPLOY_COMPLETED,
+    DEPLOY_FAILED,
+    DEPLOY_STARTED,
+    Event,
+    bus,
 )
 from kubeforge.models import Deployment, DeploymentStatus
 
@@ -43,7 +45,7 @@ async def _run_cmd(cmd: list[str], timeout: float = 600.0) -> tuple[int, str, st
     )
     try:
         stdout, stderr = await asyncio.wait_for(proc.communicate(), timeout=timeout)
-    except asyncio.TimeoutError:
+    except TimeoutError:
         proc.kill()
         await proc.communicate()
         raise DeployError(f"Command timed out after {timeout}s: {' '.join(cmd)}")

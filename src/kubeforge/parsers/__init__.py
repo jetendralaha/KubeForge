@@ -4,8 +4,8 @@ from __future__ import annotations
 
 import logging
 
-from kubeforge.parsers.base import ManifestParser, ParseOptions, ValidationError
 from kubeforge.models.manifest import NormalizedManifest
+from kubeforge.parsers.base import ManifestParser, ParseOptions, ValidationError
 
 logger = logging.getLogger("kubeforge.parsers")
 
@@ -77,8 +77,8 @@ def get_registry() -> ParserRegistry:
         _registry = ParserRegistry()
 
         from kubeforge.parsers.compose import ComposeParser
-        from kubeforge.parsers.kubernetes import KubernetesParser
         from kubeforge.parsers.helm import HelmParser
+        from kubeforge.parsers.kubernetes import KubernetesParser
 
         _registry.register(ComposeParser())
         _registry.register(KubernetesParser())

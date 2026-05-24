@@ -52,6 +52,8 @@ async def retrieve_formatted(query: str, top_k: int = 5) -> str:
     parts = []
     for i, ctx in enumerate(contexts, 1):
         parts.append(
-            f"--- Context {i} (source: {ctx['source']}, topic: {ctx['topic']}, score: {ctx['score']:.2f}) ---\n{ctx['text']}\n"
+            f"--- Context {i} (source: {ctx['source']}, topic: {ctx['topic']}, "
+            f"score: {ctx['score']:.2f}) ---\n"
+            f"{ctx['text']}\n"
         )
     return "\n".join(parts)

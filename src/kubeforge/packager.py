@@ -21,20 +21,18 @@ from __future__ import annotations
 
 import hashlib
 import logging
-import os
-import shutil
 import tarfile
 import tempfile
 import textwrap
-from datetime import datetime, timezone
+from collections.abc import Callable
+from datetime import UTC, datetime
 from io import BytesIO
 from pathlib import Path
-from typing import Callable
 
 from kubeforge.config import settings
-from kubeforge.image_puller import pull_images, compute_image_checksums
+from kubeforge.image_puller import pull_images
 from kubeforge.iso_builder import build_iso, compute_iso_checksum
-from kubeforge.k3s_downloader import download_all as download_k3s_all, compute_checksums as k3s_checksums
+from kubeforge.k3s_downloader import download_all as download_k3s_all
 
 logger = logging.getLogger("kubeforge.packager")
 
@@ -63,7 +61,7 @@ async def create_bundle(
     out = Path(output_dir or settings.packager.output_dir)
     out.mkdir(parents=True, exist_ok=True)
 
-    timestamp = datetime.now(timezone.utc).strftime("%Y%m%d-%H%M%S")
+    timestamp = datetime.now(UTC).strftime("%Y%m%d-%H%M%S")
     archive_name = f"{project_name}-{timestamp}.tar.gz"
     archive_path = out / archive_name
     prefix = f"{project_name}/"
@@ -157,7 +155,7 @@ async def create_iso(
     out = Path(output_dir or settings.packager.output_dir)
     out.mkdir(parents=True, exist_ok=True)
 
-    timestamp = datetime.now(timezone.utc).strftime("%Y%m%d-%H%M%S")
+    timestamp = datetime.now(UTC).strftime("%Y%m%d-%H%M%S")
     iso_name = f"{project_name}-{timestamp}.iso"
     iso_path = out / iso_name
 
@@ -256,7 +254,7 @@ def _add_string(tar: tarfile.TarFile, name: str, content: str, executable: bool 
     data = content.encode("utf-8")
     info = tarfile.TarInfo(name=name)
     info.size = len(data)
-    info.mtime = int(datetime.now(timezone.utc).timestamp())
+    info.mtime = int(datetime.now(UTC).timestamp())
     info.mode = 0o755 if executable else 0o644
     tar.addfile(info, BytesIO(data))
 

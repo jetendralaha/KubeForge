@@ -3,14 +3,14 @@
 from __future__ import annotations
 
 import enum
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from uuid import uuid4
 
 from pydantic import BaseModel, Field
 
 
 def _now() -> datetime:
-    return datetime.now(timezone.utc)
+    return datetime.now(UTC)
 
 
 def _new_id() -> str:
@@ -20,26 +20,26 @@ def _new_id() -> str:
 # ── Status enums ────────────────────────────────────────────────────
 
 
-class ProjectStatus(str, enum.Enum):
+class ProjectStatus(enum.StrEnum):
     ACTIVE = "active"
     ARCHIVED = "archived"
     DELETED = "deleted"
 
 
-class ArtifactStatus(str, enum.Enum):
+class ArtifactStatus(enum.StrEnum):
     UPLOADED = "uploaded"
     PARSED = "parsed"
     FAILED = "failed"
 
 
-class AnalysisStatus(str, enum.Enum):
+class AnalysisStatus(enum.StrEnum):
     PENDING = "pending"
     RUNNING = "running"
     COMPLETED = "completed"
     FAILED = "failed"
 
 
-class DeploymentStatus(str, enum.Enum):
+class DeploymentStatus(enum.StrEnum):
     PENDING = "pending"
     RUNNING = "running"
     SUCCEEDED = "succeeded"
@@ -47,7 +47,7 @@ class DeploymentStatus(str, enum.Enum):
     ROLLED_BACK = "rolled_back"
 
 
-class PackageStatus(str, enum.Enum):
+class PackageStatus(enum.StrEnum):
     PENDING = "pending"
     BUILDING = "building"
     COMPLETED = "completed"
@@ -66,7 +66,7 @@ class Project(BaseModel):
     updated_at: datetime = Field(default_factory=_now)
 
 
-class ChartRole(str, enum.Enum):
+class ChartRole(enum.StrEnum):
     """Role of a Helm chart in a multi-chart project."""
     APP = "app"
     PAAS = "paas"

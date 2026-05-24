@@ -2,9 +2,9 @@
 
 from pathlib import Path
 
+from kubeforge.parsers import get_registry
 from kubeforge.parsers.compose import ComposeParser
 from kubeforge.parsers.kubernetes import KubernetesParser
-from kubeforge.parsers import get_registry
 
 TESTDATA = Path(__file__).parent / "testdata"
 

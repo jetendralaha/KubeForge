@@ -10,13 +10,13 @@ from fastapi import APIRouter, HTTPException
 from fastapi.responses import FileResponse
 from pydantic import BaseModel
 
+from kubeforge.bootable_iso import create_bootable_iso
 from kubeforge.db import deployments as deploy_db
 from kubeforge.db import images as image_db
 from kubeforge.db import projects as proj_db
-from kubeforge.events import Event, bus, PACKAGE_STARTED, PACKAGE_COMPLETED
+from kubeforge.events import PACKAGE_COMPLETED, PACKAGE_STARTED, Event, bus
 from kubeforge.models import PackageStatus
 from kubeforge.packager import create_bundle, create_iso
-from kubeforge.bootable_iso import create_bootable_iso
 
 logger = logging.getLogger("kubeforge.api.packages")
 

@@ -11,12 +11,15 @@ from kubeforge.models import RecommendationItem, RecommendationResult
 
 logger = logging.getLogger("kubeforge.ai.recommendations")
 
-RECOMMEND_SYSTEM = """You are a K3s deployment expert. Recommend best practices for production
-deployment on K3s with Traefik ingress and Longhorn storage.
-
-Focus on: resource optimization, HA, security hardening, ingress/TLS, storage, health probes, image management.
-
-Return JSON: {"recommendations": [{"category": "...", "title": "...", "description": "...", "priority": "high|medium|low", "auto_apply": true|false}], "summary": "..."}"""
+RECOMMEND_SYSTEM = (
+    "You are a K3s deployment expert. Recommend best practices for production "
+    "deployment on K3s with Traefik ingress and Longhorn storage.\n\n"
+    "Focus on: resource optimization, HA, security hardening, ingress/TLS, "
+    "storage, health probes, image management.\n\n"
+    "Return JSON: {\"recommendations\": [{\"category\": \"...\", \"title\": "
+    "\"...\", \"description\": \"...\", \"priority\": \"high|medium|low\", "
+    "\"auto_apply\": true|false}], \"summary\": \"...\"}"
+)
 
 
 async def get_recommendations(content: str, artifact_type: str = "") -> RecommendationResult:
@@ -52,7 +55,6 @@ def _heuristic_recommendations(content: str, artifact_type: str) -> list[Recomme
         return recs
 
     has_ingress = False
-    has_pvc = False
     has_netpol = False
     has_hpa = False
     service_count = 0
@@ -66,8 +68,6 @@ def _heuristic_recommendations(content: str, artifact_type: str) -> list[Recomme
         kind = doc.get("kind", "")
         if kind in ("Ingress", "IngressRoute"):
             has_ingress = True
-        if kind == "PersistentVolumeClaim":
-            has_pvc = True
         if kind == "NetworkPolicy":
             has_netpol = True
         if kind == "HorizontalPodAutoscaler":
@@ -146,8 +146,16 @@ def _heuristic_recommendations(content: str, artifact_type: str) -> list[Recomme
 
 async def _llm_recommendations(content: str, artifact_type: str) -> list[RecommendationItem]:
     truncated = content[:4000]
+    prompt = (
+        f"Analyse this {artifact_type or 'deployment'} for K3s:\n\n"
+        "```yaml\n"
+        f"{truncated}\n"
+        "```\n\n"
+        "Recommend optimisations."
+    )
+
     result = await chat_completion(
-        prompt=f"Analyse this {artifact_type or 'deployment'} for K3s:\n\n```yaml\n{truncated}\n```\n\nRecommend optimisations.",
+        prompt=prompt,
         system_prompt=RECOMMEND_SYSTEM,
         json_schema={"type": "object"},
     )

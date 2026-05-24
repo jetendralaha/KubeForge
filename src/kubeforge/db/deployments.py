@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 from kubeforge.db.engine import get_db
 from kubeforge.models import (
@@ -13,7 +13,6 @@ from kubeforge.models import (
     PackageStatus,
     PackagingJob,
 )
-
 
 # ── Generated manifests ────────────────────────────────────────────
 
@@ -75,7 +74,7 @@ async def update_packaging_job(
     output_path: str = "", size_bytes: int = 0, error_message: str = "",
 ) -> None:
     db = await get_db()
-    completed = datetime.now(timezone.utc).isoformat() if status in (PackageStatus.COMPLETED, PackageStatus.FAILED) else None
+    completed = datetime.now(UTC).isoformat() if status in (PackageStatus.COMPLETED, PackageStatus.FAILED) else None
     await db.execute(
         """UPDATE packaging_jobs SET status = ?, output_path = ?, size_bytes = ?,
            error_message = ?, completed_at = ? WHERE id = ?""",
@@ -111,7 +110,7 @@ async def update_deployment_status(deployment_id: str, status: DeploymentStatus,
     db = await get_db()
     await db.execute(
         "UPDATE deployments SET status = ?, log = ?, updated_at = ? WHERE id = ?",
-        (status.value, log, datetime.now(timezone.utc).isoformat(), deployment_id),
+        (status.value, log, datetime.now(UTC).isoformat(), deployment_id),
     )
     await db.commit()
 

@@ -10,7 +10,7 @@ from fastapi import APIRouter, HTTPException
 from kubeforge.ai import detect_risks, detect_type, get_recommendations
 from kubeforge.db import analyses as analysis_db
 from kubeforge.db import artifacts as artifact_db
-from kubeforge.events import Event, bus, ANALYSIS_COMPLETED
+from kubeforge.events import ANALYSIS_COMPLETED, Event, bus
 from kubeforge.models import AnalysisStatus
 
 logger = logging.getLogger("kubeforge.api.analysis")

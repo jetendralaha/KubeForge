@@ -21,8 +21,8 @@ import json
 import logging
 import shutil
 import tempfile
+from collections.abc import Callable
 from pathlib import Path
-from typing import Callable
 
 from kubeforge.config import settings
 
@@ -58,7 +58,7 @@ async def _run_cmd(cmd: list[str], timeout: float = 600.0) -> tuple[int, str, st
     )
     try:
         stdout, stderr = await asyncio.wait_for(proc.communicate(), timeout=timeout)
-    except asyncio.TimeoutError:
+    except TimeoutError:
         proc.kill()
         await proc.communicate()
         raise ImagePullError(f"Command timed out after {timeout}s: {' '.join(cmd)}")

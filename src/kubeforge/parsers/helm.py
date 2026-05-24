@@ -20,7 +20,7 @@ import tarfile
 import tempfile
 from pathlib import Path
 
-import yaml
+import yaml  # type: ignore[import]
 
 from kubeforge.config import settings
 from kubeforge.models.manifest import NormalizedManifest

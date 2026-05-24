@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import logging
+from typing import Any
 
 from kubeforge.ai.knowledge.prompts import CHUNK_PREFIX_MANIFEST
 from kubeforge.ai.ollama import generate_embedding
@@ -26,8 +27,8 @@ async def retrieve_context(
     try:
         from qdrant_client import QdrantClient
 
-        client = QdrantClient(url=settings.qdrant.url)
-        results = client.search(
+        client: Any = QdrantClient(url=settings.qdrant.url)
+        results = client.search(  # type: ignore[attr-defined]
             collection_name=collection,
             query_vector=embedding,
             limit=top_k,

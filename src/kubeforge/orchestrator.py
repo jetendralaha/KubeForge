@@ -198,7 +198,7 @@ async def deploy_project(
             for m in group_manifests:
                 if "namespace" in m.filename.lower():
                     # Parse namespace from the YAML content
-                    import yaml
+                    import yaml  # type: ignore[import]
                     try:
                         doc = yaml.safe_load(m.content)
                         if doc and doc.get("kind") == "Namespace":

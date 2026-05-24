@@ -8,7 +8,7 @@ from __future__ import annotations
 
 import logging
 
-import yaml
+import yaml  # type: ignore[import]
 
 from kubeforge.models.manifest import (
     ConfigData,

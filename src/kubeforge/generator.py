@@ -12,8 +12,9 @@ Generates security-hardened manifests for K3s with:
 from __future__ import annotations
 
 import logging
+from typing import Any
 
-import yaml
+import yaml  # type: ignore[import]
 
 from kubeforge.models.manifest import NormalizedManifest, Workload
 from kubeforge.resolver import build_dependency_graph, detect_databases, detect_exposed_services
@@ -113,7 +114,7 @@ def generate(manifest: NormalizedManifest, namespace: str = "", skip_hardening: 
             "ValidatingWebhookConfiguration", "PriorityClass",
         }
         for raw in manifest.raw_resources:
-            doc = {
+            doc: dict[str, Any] = {
                 "apiVersion": raw.api_version,
                 "kind": raw.kind,
                 "metadata": dict(raw.metadata),  # Copy to avoid mutating original
@@ -274,7 +275,7 @@ def _build_workload(ns: str, w: Workload, is_stateful: bool, sa_name: str, skip_
     res = w.resources
     if skip_hardening and (res.cpu_request or res.memory_request or res.cpu_limit or res.memory_limit):
         # Preserve the chart's own resource settings
-        resources: dict = {"requests": {}, "limits": {}}
+        resources: dict[str, dict[str, str]] = {"requests": {}, "limits": {}}
         if res.cpu_request:
             resources["requests"]["cpu"] = res.cpu_request
         if res.memory_request:

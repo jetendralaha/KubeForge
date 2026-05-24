@@ -77,11 +77,14 @@ async def index_builtin_knowledge() -> int:
 
 def _split_chunks(text: str, size: int, overlap: int) -> list[str]:
     lines = [line.strip() for line in text.split("\n") if line.strip()]
-    chunks, current, length = [], [], 0
+    chunks: list[str] = []
+    current: list[str] = []
+    length = 0
     for line in lines:
         if length + len(line) > size and current:
             chunks.append("\n".join(current))
-            keep, klen = [], 0
+            keep: list[str] = []
+            klen = 0
             for s in reversed(current):
                 if klen + len(s) > overlap:
                     break

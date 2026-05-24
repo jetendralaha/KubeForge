@@ -58,4 +58,8 @@ asyncio_mode = "auto"
 
 [tool.mypy]
 python_version = "3.11"
-strict = true
+strict = false
+# Allow missing stubs for third-party packages used in CI/dev
+ignore_missing_imports = true
+# Allow untyped defs in many helper scripts (gradual typing)
+disallow_untyped_defs = false

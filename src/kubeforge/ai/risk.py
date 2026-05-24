@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import logging
 
-import yaml
+import yaml  # type: ignore[import]
 
 from kubeforge.ai.ollama import chat_completion
 from kubeforge.models import RiskItem, RiskResult
@@ -120,7 +120,7 @@ def _heuristic_risks(content: str, artifact_type: str) -> list[RiskItem]:
                 # Secrets in plain env vars
                 env = svc.get("environment", {})
                 if isinstance(env, dict):
-                    env_items = env.items()
+                    env_items = list(env.items())
                 else:
                     env_items = []
                     seq = env if isinstance(env, list) else []
@@ -233,6 +233,8 @@ async def _llm_risks(content: str, artifact_type: str) -> list[RiskItem]:
                 severity=r.get("severity", "medium"),
                 category=r.get("category", ""),
                 remediation=r.get("remediation", ""),
+                project_id="",
+                analysis_id="",
             ))
         except Exception:
             continue

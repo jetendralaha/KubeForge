@@ -9,7 +9,7 @@ from __future__ import annotations
 import logging
 import re
 
-import yaml
+import yaml  # type: ignore[import]
 
 from kubeforge.models.manifest import (
     Dependency,

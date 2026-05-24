@@ -113,8 +113,8 @@ class AIAnalysis(BaseModel):
 
 class RiskItem(BaseModel):
     id: str = Field(default_factory=_new_id)
-    analysis_id: str
-    project_id: str
+    analysis_id: str = ""
+    project_id: str = ""
     title: str
     description: str = ""
     severity: str = "medium"         # critical, high, medium, low, info

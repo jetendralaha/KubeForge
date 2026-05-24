@@ -12,7 +12,7 @@ from kubeforge.db import images as image_db
 from kubeforge.db import projects as proj_db
 from kubeforge.events import IMAGES_RESOLVED, MANIFESTS_GENERATED, Event, bus
 from kubeforge.generator import generate
-from kubeforge.models import ArtifactStatus
+from kubeforge.models import ArtifactStatus, ChartRole
 from kubeforge.models.manifest import NormalizedManifest
 from kubeforge.parsers import get_registry
 from kubeforge.parsers.base import ParseOptions
@@ -94,9 +94,11 @@ async def generate_manifests(project_id: str, namespace: str = ""):
 
         # Build a clean role label: "paas" / "app" (from enum value) + namespace
         role_value = artifact.chart_role
-        if hasattr(role_value, "value"):
-            role_value = role_value.value  # Extract enum value
-        role_label = f"{idx:02d}-{role_value}-{ns}" if len(parsed) > 1 else ns
+        if isinstance(role_value, ChartRole):
+            role_str = role_value.value
+        else:
+            role_str = str(role_value)
+        role_label = f"{idx:02d}-{role_str}-{ns}" if len(parsed) > 1 else ns
 
         # Accumulate for combined manifest
         for filename, content in sorted(files.items()):

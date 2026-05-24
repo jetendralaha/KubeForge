@@ -1,0 +1,69 @@
+flowchart TD
+    subgraph UI["User Interface"]
+        CLI["CLI (Typer)"]
+        API["REST API (FastAPI)"]
+    end
+
+    subgraph APP["Application Layer"]
+        Projects["Projects"]
+        Artifacts["Artifacts"]
+        Analysis["Analysis"]
+    end
+
+    subgraph PARSERS["Parsers"]
+        Compose["Compose"]
+        Helm["Helm"]
+        Kubernetes["Kubernetes"]
+    end
+
+    subgraph AI["AI Engine"]
+        Detection["Detection"]
+        Risk["Risk Analysis"]
+        Recomm["Recommendations"]
+        Knowledge["Knowledge (RAG)"]
+    end
+
+    subgraph GEN["Generator"]
+        SecHarden["Security Hardening"]
+        NetPol["Network Policies"]
+        ResLimits["Resource Limits"]
+        IngressStorage["Ingress / Storage"]
+    end
+
+    IR["Normalized Manifest IR\n(Unified Intermediate Representation)"]
+
+    subgraph PKG["Packager"]
+        Images["Images"]
+        K3sBin["K3s Binary"]
+        Bundle["Bundle"]
+    end
+
+    subgraph ORCH["Orchestrator"]
+        Kubectl["kubectl"]
+        Ordering["Ordering"]
+        HealthWait["Health Wait"]
+    end
+
+    subgraph ISO["ISO Builder"]
+        BootISO["Bootable Debian ISO"]
+        K3sPre["K3s Pre-installed"]
+        Offline["Offline Deploy"]
+    end
+
+    subgraph INFRA["Infrastructure"]
+        SQLite["SQLite"]
+        EventBus["Event Bus"]
+        Config["Config"]
+    end
+
+    UI --> APP
+    APP --> PARSERS
+    APP --> AI
+    APP --> GEN
+    PARSERS --> IR
+    AI --> IR
+    GEN --> IR
+    IR --> PKG
+    IR --> ORCH
+    IR --> ISO
+    ORCH --> INFRA
